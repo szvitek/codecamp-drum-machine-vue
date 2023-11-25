@@ -1,17 +1,22 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-defineProps<{
+const emit = defineEmits(['onPlay']);
+const { id, src } = defineProps<{
   id: string;
+  src: string;
 }>();
 
-const src = '';
-
 const isPlaying = ref(false);
-const audioRef = ref();
+const audioRef = ref<HTMLAudioElement>();
+const drumpadRef = ref();
 const handleCLick = () => {
-  console.log('handle click');
+  audioRef.value!.currentTime = 0;
+  audioRef.value!.play();
+  emit('onPlay');
 };
+
+defineExpose({ id, drumpadRef });
 </script>
 
 <template>
@@ -22,12 +27,14 @@ const handleCLick = () => {
     :id="id.toUpperCase()"
     :key="id"
     @click="handleCLick"
+    @keydown="handleCLick"
+    ref="drumpadRef"
   >
     <audio
       class="clip"
       :id="id.toUpperCase()"
       :src="src"
-      :ref="audioRef"
+      ref="audioRef"
     ></audio>
     {{ id.toUpperCase() }}
   </div>

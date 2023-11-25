@@ -1,12 +1,16 @@
 <script setup lang="ts">
 defineProps<{ label: string }>();
+const emit = defineEmits(['onToggle']);
 </script>
 
 <template>
   <div>
     <h2 className="text-center mb-2">{{ label }}</h2>
     <label class="switch">
-      <input type="checkbox" />
+      <input
+        type="checkbox"
+        @change="(e) => emit('onToggle', (e.target as HTMLInputElement).checked)"
+      />
       <span class="slider"></span>
     </label>
   </div>
