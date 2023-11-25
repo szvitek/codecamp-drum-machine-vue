@@ -58,11 +58,11 @@ const emit = defineEmits(['onToggle']);
 }
 
 input:checked + .slider {
-  background-color: orange;
+  @apply bg-orange-500;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px orange;
+  @apply shadow-[0_0_1px] shadow-orange-500;
 }
 
 input:checked + .slider:before {

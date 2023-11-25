@@ -11,8 +11,11 @@ const isPlaying = ref(false);
 const audioRef = ref<HTMLAudioElement>();
 const drumpadRef = ref();
 const handleCLick = () => {
+  isPlaying.value = true;
   audioRef.value!.currentTime = 0;
   audioRef.value!.play();
+
+  setTimeout(() => (isPlaying.value = false), 200);
   emit('onPlay');
 };
 
@@ -40,4 +43,8 @@ defineExpose({ id, drumpadRef });
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.active {
+  @apply bg-orange-500 text-black border-yellow-300 border-4;
+}
+</style>

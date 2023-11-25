@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import DrumPad from './components/DrumPad.vue';
 import Slider from './components/Slider.vue';
 import Toggle from './components/Toggle.vue';
@@ -51,6 +51,14 @@ const handleKeydown = ({ key }: KeyboardEvent) => {
     drumpad!.drumpadRef.click();
   }
 };
+
+watch(selectedBank, (value) => {
+  if (value === 'hard') {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+});
 
 const toggleBanks = (checked: boolean) => {
   selectedBank.value = checked ? 'hard' : 'chill';
