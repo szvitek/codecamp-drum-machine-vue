@@ -1,47 +1,30 @@
 <template>
-  <div class="slidecontainer">
+  <div class="w-full">
     <input
       type="range"
       min="1"
       max="100"
-      value="80"
-      class="slider"
+      :value="value"
+      @input="(e) => emit('onChange', parseInt((e.target as HTMLInputElement).value))"
+      class="slider appearance-none w-full h-[25px] bg-slate-300 outline-none opacity-70 transition-opacity duration-200 hover:opacity-100"
       id="myRange"
+      :disabled="!power"
     />
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineProps<{ value: number; power: boolean }>();
+const emit = defineEmits(['onChange']);
+</script>
 
 <style scoped>
-.slidecontainer {
-  width: 100%; /* Width of the outside container */
-}
-
-/* The slider itself */
-.slider {
-  -webkit-appearance: none; /* Override default CSS styles */
-  appearance: none;
-  width: 100%; /* Full-width */
-  height: 25px; /* Specified height */
-  background: #d3d3d3; /* Grey background */
-  outline: none; /* Remove outline */
-  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-  -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
-  transition: opacity 0.2s;
-}
-
-/* Mouse-over effects */
-.slider:hover {
-  opacity: 1; /* Fully shown on mouse-over */
-}
-
 /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
 .slider::-webkit-slider-thumb {
-  @apply bg-orange-500 w-[25px] h-[25px] cursor-pointer appearance-none
+  @apply bg-orange-500 w-[25px] h-[25px] cursor-pointer appearance-none;
 }
 
 .slider::-moz-range-thumb {
-  @apply bg-orange-500 w-[25px] h-[25px] cursor-pointer
+  @apply bg-orange-500 w-[25px] h-[25px] cursor-pointer;
 }
 </style>

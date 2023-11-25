@@ -2,16 +2,21 @@
 import { ref } from 'vue';
 
 const emit = defineEmits(['onPlay']);
-const { id, src } = defineProps<{
+//! props lose reactivity on destructuring!! either use toRef(s) or not destructure them
+const props = defineProps<{
   id: string;
   src: string;
+  power: boolean;
+  volume: number;
 }>();
 
 const isPlaying = ref(false);
 const audioRef = ref<HTMLAudioElement>();
 const drumpadRef = ref();
 const handleCLick = () => {
+  if (!props.power) return;
   isPlaying.value = true;
+  audioRef.value!.volume = props.volume / 100;
   audioRef.value!.currentTime = 0;
   audioRef.value!.play();
 
@@ -19,7 +24,7 @@ const handleCLick = () => {
   emit('onPlay');
 };
 
-defineExpose({ id, drumpadRef });
+defineExpose({ id: props.id, drumpadRef });
 </script>
 
 <template>
@@ -45,6 +50,6 @@ defineExpose({ id, drumpadRef });
 
 <style scoped>
 .active {
-  @apply bg-orange-500 text-black border-yellow-300 border-4;
+  @apply bg-orange-500 font-bold border-yellow-300 border-4;
 }
 </style>

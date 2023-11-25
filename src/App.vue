@@ -39,10 +39,11 @@ const banks: Banks = {
   },
 };
 
+const power = ref(true);
+const volume = ref(80);
 const selectedBank = ref<keyof typeof banks>('chill');
 const displayText = ref('Heater Kit');
 const drumpadRefs = ref<InstanceType<typeof DrumPad>[]>([]);
-const testRef = ref();
 
 const handleKeydown = ({ key }: KeyboardEvent) => {
   const k = key.toLowerCase() as Keys;
@@ -59,6 +60,17 @@ watch(selectedBank, (value) => {
     document.documentElement.classList.remove('dark');
   }
 });
+
+const togglePower = (checked: boolean) => {
+  console.log('checke', checked);
+  power.value = checked;
+  displayText.value = `Power ${checked ? 'On' : 'Off'}`;
+};
+
+const volumeChange = (vol: number) => {
+  volume.value = vol;
+  displayText.value = `Volume: ${vol}`;
+};
 
 const toggleBanks = (checked: boolean) => {
   selectedBank.value = checked ? 'hard' : 'chill';
@@ -85,28 +97,30 @@ onUnmounted(() => {
         :key="key"
         :id="key"
         :src="`${selectedBank}/${banks[selectedBank][key].src}`"
-        @on-play="displayText = banks[selectedBank][key].name"
+        @onPlay="displayText = banks[selectedBank][key].name"
         ref="drumpadRefs"
+        :power="power"
+        :volume="volume"
       />
     </div>
     <div class="logo absolute top-0.5 right-2">
-      <p class="font-bold">
+      <a class="font-bold" href="https://www.freecodecamp.org" target="_blank">
         FCC <font-awesome-icon icon="fa-brands fa-free-code-camp" />
-      </p>
+      </a>
     </div>
     <div
-      class="controls flex flex-1 flex-col justify-around items-center min-h-[300px]"
+      class="controls flex flex-1 flex-col justify-around items-center min-h-[300px] md:ml-6"
     >
       <div>
-        <Toggle label="Power" ref="testRef" />
+        <Toggle label="Power" :isChecked="power" @onToggle="togglePower" />
       </div>
-      <div id="display" class="border-2 px-4 py-2 rounded-md">
+      <div id="display" class="border-2 px-4 py-2 rounded-md self-stretch">
         {{ displayText }}
       </div>
-      <div>
-        <Slider />
+      <div class="self-stretch">
+        <Slider :value="volume" @on-change="volumeChange" :power="power" />
       </div>
-      <div>
+      <div :class="{ 'pointer-events-none': !power }">
         <Toggle label="Banks" @onToggle="toggleBanks" />
       </div>
     </div>
